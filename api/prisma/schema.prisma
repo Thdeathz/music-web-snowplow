@@ -32,3 +32,42 @@ model Account {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Music {
+  id        String     @id @default(uuid())
+  title     String
+  thumbnail String
+  duration  Int
+  url       String
+  artist    Artist     @relation(fields: [artistId], references: [id])
+  artistId  String // relation scalar feild
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  playlists Playlist[]
+  topics    Topic[]
+}
+
+model Playlist {
+  id        String   @id @default(uuid())
+  title     String
+  cover     String
+  musics    Music[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Artist {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  musics    Music[]
+}
+
+model Topic {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  musics    Music[]
+}

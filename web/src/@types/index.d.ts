@@ -14,8 +14,11 @@ declare interface ApiResponse<T> {
 declare interface ApiResponsePaginated<T> {
   message: string
   data: T
-  currentPage: number
-  totalPages: number
+  meta: {
+    currentPage: number
+    total: number
+    offset: number
+  }
 }
 
 declare interface ApiResult {

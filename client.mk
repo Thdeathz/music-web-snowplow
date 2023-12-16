@@ -26,17 +26,17 @@ devinstall:
 prisma-format:
 	docker exec -it $(COMPOSE_PROJECT_NAME)-api-1 yarn prisma format
 
-prisma-migrate:
+devmigrate:
 	docker exec -it $(COMPOSE_PROJECT_NAME)-api-1 yarn prisma migrate dev --name init --create-only
 
-prisma-deploy:
+devdeploy:
 	docker exec -it $(COMPOSE_PROJECT_NAME)-api-1 yarn prisma migrate deploy
 
-prisma-reset:
+devreset:
 	@docker exec -it $(COMPOSE_PROJECT_NAME)-api-1 yarn prisma migrate reset --force
 	@docker exec -it $(COMPOSE_PROJECT_NAME)-api-1 yarn seed
 
-prisma-seed:
+devseed:
 	docker exec -it $(COMPOSE_PROJECT_NAME)-api-1 yarn seed
 
 logserver:

@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
+import './font.css'
 import './index.css'
 import 'antd/dist/reset.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'

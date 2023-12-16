@@ -37,7 +37,7 @@ const Welcome = () => {
           </p>
 
           <Tooltip title="logout" arrow={false}>
-            <LogoutOutlined className="text-xl transition-colors hover:text-primary-5" onClick={onLogout} />
+            <LogoutOutlined className="hover:text-primary-5 text-xl transition-colors" onClick={onLogout} />
           </Tooltip>
         </div>
 

@@ -18,6 +18,22 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
+  snowplow-micro:
+    image: snowplow/snowplow-micro:2.0.0
+    restart: unless-stopped
+    command: >
+      --collector-config /srv/snowplow/collector.conf
+      --iglu /srv/snowplow/iglu.json
+    # - --resolver /srv/snowplow/resolver.json
+    # - --enrichments /srv/snowplow/enrichments
+    # - --force-ipv4
+    volumes:
+      - ./snowplow:/srv/snowplow
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-micro.rule=Host(`${SNOWPLOW_DOMAIN}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}-micro.loadbalancer.server.port=9090
+
   api:
     image: node:18-alpine
     restart: unless-stopped
@@ -51,6 +67,7 @@ services:
     depends_on:
       - traefik
       - api
+      - snowplow-micro
 
   redis:
     image: redis:7.2-alpine

@@ -6,7 +6,8 @@ import PersistLogin from './features/auth/components/PersistLogin'
 import RequireAuth from './features/auth/components/RequireAuth'
 import Login from './features/auth/Login'
 import Signup from './features/auth/Signup'
-import Welcome from './features/users/Welcome'
+import Home from './features/music/Home'
+import TrackerWrapper from './components/TrackerWrapper'
 
 function App() {
   return (
@@ -17,7 +18,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Route>
-        <Route path="/" element={<Welcome />} />
+
+        <Route element={<TrackerWrapper />}>
+          <Route path="/" element={<Home />} />
+        </Route>
       </Route>
     </Routes>
   )

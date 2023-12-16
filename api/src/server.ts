@@ -18,6 +18,7 @@ import rootRoute from '~/api/routes/root.route'
 import notFoundRoute from '~/api/routes/404.route'
 import authRoutes from '~/api/routes/auth.route'
 import userRoutes from '~/api/routes/user.route'
+import musicRoutes from '~/api/routes/music.route'
 
 dotenv.config()
 
@@ -42,6 +43,7 @@ admin.initializeApp({
 app.use('/api', rootRoute)
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/music', musicRoutes)
 
 // private routes
 app.use('*', notFoundRoute)
