@@ -18,21 +18,26 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  snowplow-micro:
+  snowplow:
     image: snowplow/snowplow-micro:2.0.0
     restart: unless-stopped
+    working_dir: /srv/snowplow
     command: >
       --collector-config /srv/snowplow/collector.conf
       --iglu /srv/snowplow/iglu.json
-    # - --resolver /srv/snowplow/resolver.json
-    # - --enrichments /srv/snowplow/enrichments
-    # - --force-ipv4
     volumes:
       - ./snowplow:/srv/snowplow
+      - ./snowplow/iglu/schemas:/config/iglu-client-embedded/schemas
+    environment:
+      - MICRO_IGLU_REGISTRY_URL=http://${IGLU_DOMAIN:-localhost}:${PORT:-8080}/api
+      - MICRO_IGLU_API_KEY=${IGLU_SUPER_API_KEY:-5fb4713d-73ad-4163-93a9-2b82f0177c5b}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-micro.rule=Host(`${SNOWPLOW_DOMAIN}`)
-      - traefik.http.services.${COMPOSE_PROJECT_NAME}-micro.loadbalancer.server.port=9090
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-snowplow.rule=Host(`${SNOWPLOW_DOMAIN}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}-snowplow.loadbalancer.server.port=9090
+    depends_on:
+      - traefik
+      - iglu
 
   api:
     image: node:18-alpine
@@ -67,7 +72,26 @@ services:
     depends_on:
       - traefik
       - api
-      - snowplow-micro
+      - snowplow
+
+  iglu:
+    image: snowplow/iglu-server:0.11.0
+    restart: unless-stopped
+    working_dir: /snowplow
+    volumes:
+      - ./snowplow/iglu/server.config.hocon:/snowplow/config/config.hocon
+    command: >
+      --config /snowplow/config/config.hocon
+    environment:
+      IGLU_SUPER_API_KEY: ${IGLU_SUPER_API_KEY:-5fb4713d-73ad-4163-93a9-2b82f0177c5b}
+      IGLU_DB_PASSWORD: ${IGLU_DB_PASSWORD:-postgres}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-iglu.rule=Host(`${IGLU_DOMAIN}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}-iglu.loadbalancer.server.port=8080
+    depends_on:
+      - traefik
+      - postgres
 
   redis:
     image: redis:7.2-alpine
@@ -85,6 +109,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./.data/postgres:/var/lib/postgresql/data
+      - ./snowplow/iglu/init-database.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}

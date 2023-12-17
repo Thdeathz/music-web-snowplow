@@ -10,14 +10,15 @@ import musicService from '../services/music.service'
 export const getAllMusic: RequestHandler = async (req, res) => {
   const page = parseInt(<string>req.query.page) || 1
   const offset = parseInt(<string>req.query.offset) || 10
+  const topic = req.query.topic as string | undefined
 
-  const { musics, total } = await musicService.getAllMusics(page, offset)
+  const { musics, total } = await musicService.getMusics(page, offset, topic)
 
   return res.status(200).json({
     message: 'Get all musics successfully',
     data: musics,
     meta: {
-      total: total / offset,
+      total: Math.ceil(total / offset),
       currentPage: page,
       offset
     }

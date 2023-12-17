@@ -5,15 +5,9 @@ type TopicFactory = {
 }
 
 export const topicFactory = async () => {
-  let topics: TopicFactory[] = []
+  const names = faker.helpers.uniqueArray(faker.definitions.music.genre, 10)
 
-  Array.from(Array(10)).map(async () => {
-    const name = faker.music.genre()
-
-    topics.push({
-      name
-    })
-  })
+  const topics: TopicFactory[] = names.map(each => ({ name: each }))
 
   return topics
 }

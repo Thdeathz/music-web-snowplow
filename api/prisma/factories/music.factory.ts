@@ -13,8 +13,9 @@ type MusicFactory = {
 export const musicFactory = async (topics: Topic[], artists: Artist[]) => {
   let musics: MusicFactory[] = []
 
-  Array.from(Array(50)).map(async () => {
-    const title = faker.music.songName()
+  const titles = faker.helpers.uniqueArray(faker.definitions.music.song_name, 50)
+
+  titles.map(async title => {
     const thumbnail = faker.image.url()
     const duration = faker.number.int({ min: 200, max: 500 })
     const url = faker.internet.url()

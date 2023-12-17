@@ -1,0 +1,24 @@
+{
+  "$schema": "http://iglucentral.com/schemas/com.snowplowanalytics.self-desc/schema/jsonschema/1-0-0#",
+  "description": "Schema for user find songs list by artist event",
+  "self": {
+    "vendor": "com.chillzone",
+    "name": "filter_artist",
+    "format": "jsonschema",
+    "version": "1-0-0"
+  },
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string",
+      "description": "The artist id"
+    },
+    "artist_name": {
+      "type": "string",
+      "description": "The artist name"
+    }
+  },
+  "required": [
+    "artist_name"
+  ]
+}

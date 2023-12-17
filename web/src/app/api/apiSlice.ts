@@ -44,7 +44,7 @@ const baseQueryWithRetry: BaseQueryFn = async (args, api, extraOptions) => {
 
 const apiSlice = createApi({
   baseQuery: baseQueryWithRetry,
-  tagTypes: ['User', 'Music'],
+  tagTypes: ['User', 'Music', 'Topic'],
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   endpoints: builder => ({})
 })

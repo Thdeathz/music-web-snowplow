@@ -4,6 +4,9 @@ import Image from '~/components/Image'
 import { useGetMusicQuery } from '../store/musicService'
 import Loading from '~/components/Loading'
 import { useNavigate } from 'react-router-dom'
+import { trackSelfDescribingEvent } from '@snowplow/browser-tracker'
+import { selectCurrentFilterTopic } from '../store/musicSlice'
+import { useAppSelector } from '~/hooks/useRedux'
 
 type MusicItemPropsType = {
   music: IMusic
@@ -12,7 +15,19 @@ type MusicItemPropsType = {
 const MusicItem = ({ music }: MusicItemPropsType) => {
   const navigate = useNavigate()
 
-  const onClick = () => {
+  const onPlaySong = () => {
+    trackSelfDescribingEvent({
+      event: {
+        schema: 'iglu:com.chillzone/play_music/jsonschema/1-0-0',
+        data: {
+          song_id: music.id,
+          song_title: music.title,
+          artist_name: music.artist.name,
+          topics_list: music.topics.map(each => each.name)
+        }
+      }
+    })
+
     navigate(
       `?${new URLSearchParams({
         play: music.id
@@ -20,31 +35,55 @@ const MusicItem = ({ music }: MusicItemPropsType) => {
     )
   }
 
-  return (
-    <div
-      className="group z-30 flex h-full min-w-[15rem] cursor-pointer select-none flex-col items-center justify-start overflow-y-visible transition-transform duration-200 hover:translate-y-[-6px]"
-      onClick={onClick}
-    >
-      <Image
-        src={music.thumbnail}
-        className="h-0 grow rounded-md object-cover shadow-md transition-shadow duration-200 group-hover:shadow-xl"
-      />
+  const onSelectArtist = () => {
+    trackSelfDescribingEvent({
+      event: {
+        schema: 'iglu:com.chillzone/filter_artist/jsonschema/1-0-0',
+        data: {
+          artist_id: music.artist.id,
+          artist_name: music.artist.name
+        }
+      }
+    })
+  }
 
-      <div className="text-center">
-        <p className="font-secondary w-[15rem] truncate px-2 text-3xl font-semibold">{music.title}</p>
-        <p className="cursor-pointer text-base underline">by {music.artist.name}</p>
+  return (
+    <div className="group z-30 flex h-full flex-col items-center justify-start">
+      <div
+        className="group flex h-0 min-w-[15rem] shrink grow cursor-pointer select-none flex-col items-center justify-start overflow-y-visible transition-transform duration-200 hover:translate-y-[-6px]"
+        onClick={onPlaySong}
+      >
+        <Image
+          src={music.thumbnail}
+          className="h-0 grow rounded-md object-cover shadow-md transition-shadow duration-200 group-hover:shadow-xl"
+        />
+
+        <div className="text-center">
+          <p className="font-secondary w-[15rem] truncate px-2 text-3xl font-semibold">{music.title}</p>
+        </div>
       </div>
+
+      <button
+        className="cursor-pointer p-1 text-base underline transition-all duration-200 hover:translate-y-[-3px] hover:text-input-glory-light"
+        onClick={onSelectArtist}
+      >
+        by {music.artist.name}
+      </button>
     </div>
   )
 }
 
 const MusicList = () => {
-  const { data: musics, isLoading } = useGetMusicQuery({ page: 1 })
+  const filterTopic = useAppSelector(selectCurrentFilterTopic)
+  const { data: musics, isLoading } = useGetMusicQuery({
+    page: 1,
+    topic: filterTopic === 'All' ? '' : filterTopic
+  })
 
   if (isLoading || !musics) return <Loading className="text-3xl" />
 
   return (
-    <div className="hidden-scroll-bar flex h-0 w-full grow items-center justify-start gap-2 overflow-x-auto">
+    <div className="hidden-scroll-bar flex h-0 w-full grow items-center justify-start gap-2 overflow-x-auto pt-4">
       {musics.data.map(each => (
         <MusicItem key={`music-${each.id}`} music={each} />
       ))}

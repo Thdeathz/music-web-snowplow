@@ -1,5 +1,13 @@
 import prisma from '../databases/init.prisma'
 
+const getMusics = async (page: number, offset: number, topic?: string) => {
+  if (topic) {
+    return await getAllMusicsByTopic(page, offset, topic)
+  }
+
+  return await getAllMusics(page, offset)
+}
+
 const getAllMusics = async (page: number, offset: number) => {
   const musics = await prisma.music.findMany({
     skip: (page - 1) * offset,
@@ -25,6 +33,57 @@ const getAllMusics = async (page: number, offset: number) => {
   })
 
   const total = await prisma.music.count()
+
+  if (!musics) throw new Error('Musics not found')
+
+  console.log('==> getAllMusics: ', musics)
+
+  return {
+    musics,
+    total
+  }
+}
+
+const getAllMusicsByTopic = async (page: number, offset: number, topic: string) => {
+  const musics = await prisma.music.findMany({
+    skip: (page - 1) * offset,
+    take: offset,
+    where: {
+      topics: {
+        some: {
+          name: topic
+        }
+      }
+    },
+    select: {
+      id: true,
+      title: true,
+      thumbnail: true,
+      duration: true,
+      artist: {
+        select: {
+          id: true,
+          name: true
+        }
+      },
+      topics: {
+        select: {
+          id: true,
+          name: true
+        }
+      }
+    }
+  })
+
+  const total = await prisma.music.count({
+    where: {
+      topics: {
+        some: {
+          name: topic
+        }
+      }
+    }
+  })
 
   if (!musics) throw new Error('Musics not found')
 
@@ -66,6 +125,8 @@ const getMusicById = async (id: string) => {
 }
 
 export default {
+  getMusics,
   getAllMusics,
-  getMusicById
+  getMusicById,
+  getAllMusicsByTopic
 }

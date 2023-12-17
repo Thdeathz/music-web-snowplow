@@ -11,9 +11,6 @@ import {
 import IconWrapper from '~/components/IconWrapper'
 import { useGetMusicByIdQuery } from '../store/musicService'
 import Loading from '~/components/Loading'
-import { useEffectOnce } from 'usehooks-ts'
-import { trackPageView } from '@snowplow/browser-tracker'
-import { useLocationChange } from '~/app/tracker'
 
 type PropsType = {
   musicId: string
@@ -21,16 +18,6 @@ type PropsType = {
 
 const PlayMusicControl = ({ musicId }: PropsType) => {
   const { data: music, isLoading, isFetching } = useGetMusicByIdQuery(musicId)
-
-  useLocationChange()
-
-  useEffectOnce(() => {
-    if (music) {
-      trackPageView({
-        title: document.title
-      })
-    }
-  })
 
   if (isLoading || isFetching || !music) return <Loading className="text-3xl" />
 
@@ -47,7 +34,7 @@ const PlayMusicControl = ({ musicId }: PropsType) => {
         </div>
 
         <div className="flex items-center justify-start gap-2">
-          {music.topics.slice(0, 2).map(topic => (
+          {music.topics.slice(0, 3).map(topic => (
             <div
               key={`topic-${topic.id}`}
               className="font-secondary w-min whitespace-nowrap rounded-full border-2 border-clr-link-light bg-clr-link-light px-5 text-3xl font-semibold leading-6 text-white"

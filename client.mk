@@ -1,9 +1,3 @@
-ifeq (,$(wildcard .env))
-$(shell cp .env.example .env)
-endif
-
-include .env
-
 genkey:
 	node -e "console.log(require('crypto').randomBytes(128).toString('hex'))"
 
@@ -39,11 +33,6 @@ devreset:
 devseed:
 	docker exec -it $(COMPOSE_PROJECT_NAME)-api-1 yarn seed
 
-logserver:
-	docker logs -f $(COMPOSE_PROJECT_NAME)-api-1
-
 devclean: devdown
 	@docker rmi $$(docker images -a -q)
 	@docker volume rm $$(docker volume ls -q)
-devrun-server:
-	docker compose exec -it server yarn dev

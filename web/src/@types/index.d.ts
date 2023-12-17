@@ -40,3 +40,7 @@ declare interface RemainingTime {
 declare interface ErrorMessages {
   [key: string]: { name: string; errors: string[] }
 }
+
+declare interface PayloadAction<T> {
+  payload: T
+}

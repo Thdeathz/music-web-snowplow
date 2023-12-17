@@ -5,15 +5,9 @@ type ArtistFactory = {
 }
 
 export const artistFactory = async () => {
-  let artists: ArtistFactory[] = []
+  const names = faker.helpers.uniqueArray(faker.definitions.person.last_name, 10)
 
-  Array.from(Array(10)).map(async () => {
-    const name = faker.person.lastName()
-
-    artists.push({
-      name
-    })
-  })
+  const artists: ArtistFactory[] = names.map(each => ({ name: each }))
 
   return artists
 }

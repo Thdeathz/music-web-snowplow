@@ -16,7 +16,7 @@ const PlayingMusicSection = () => {
         {musicId ? (
           <PlayMusicControl musicId={musicId} />
         ) : (
-          <p className="font-secondary pt-16 text-6xl font-semibold opacity-30">Please select a music</p>
+          <p className="font-secondary pt-16 text-6xl font-semibold opacity-30">Please select a song</p>
         )}
       </div>
     </div>

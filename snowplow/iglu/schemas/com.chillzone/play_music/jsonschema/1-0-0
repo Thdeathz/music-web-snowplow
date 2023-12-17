@@ -1,0 +1,36 @@
+{
+  "$schema": "http://iglucentral.com/schemas/com.snowplowanalytics.self-desc/schema/jsonschema/1-0-0#",
+  "description": "Schema for a song played event",
+  "self": {
+    "vendor": "com.chillzone",
+    "name": "play_music",
+    "format": "jsonschema",
+    "version": "1-0-0"
+  },
+  "type": "object",
+  "properties": {
+    "song_id": {
+      "type": "string",
+      "description": "The ID of the song"
+    },
+    "song_title": {
+      "type": "string",
+      "description": "The title of the song"
+    },
+    "artist_name": {
+      "type": "string",
+      "description": "The name of the artist"
+    },
+    "topics_list": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The list of topics associated with the song"
+    }
+  },
+  "required": [
+    "song_title",
+    "artist_name"
+  ]
+}
