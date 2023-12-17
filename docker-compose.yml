@@ -164,3 +164,20 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-postgres}
     ports:
       - ${POSTGRES_PORT:-5432}:5432
+
+  metabase:
+    image: metabase/metabase:v0.48.0
+    restart: unless-stopped
+    volumes:
+      - ./.data/metabase:/metabase-data
+    # environment:
+    #   - MB_DB_TYPE=mongo
+    #   - MB_DB_DBNAME=mern
+    #   - MB_DB_PORT=27017
+    #   - MB_DB_HOST=mongodb
+    # labels:
+    #   - traefik.enable=true
+    #   - traefik.http.routers.${COMPOSE_PROJECT_NAME}-metabase.rule=Host(`${METABASE_DOMAIN}`)
+    #   - traefik.http.services.${COMPOSE_PROJECT_NAME}-metabase.loadbalancer.server.port=3500
+    ports:
+      - 3500:3000
