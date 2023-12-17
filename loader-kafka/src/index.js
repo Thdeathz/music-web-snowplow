@@ -44,4 +44,5 @@ mongoose.connection.on('error', err => {
 })
 
 createTopic()
-fetchDataFromAPI()
+// fetchDataFromAPI()
+producerSending()
