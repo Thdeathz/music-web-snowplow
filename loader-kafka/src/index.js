@@ -11,8 +11,9 @@ import connectDB from './databases/init.mogodb.js'
 import corsOptions from './config/corsOptions.js'
 
 import errorHandler from './middleware/errorHandler.js'
-import { fetchDataFromAPI, producerSending} from './utils/producer.js'
+import { fetchDataFromAPI, producerSending } from './utils/producer.js'
 import { createTopic } from './utils/create-topic.js'
+
 dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3500
@@ -23,7 +24,7 @@ connectDB()
 /* MIDDLEWARE */
 app.use(morgan('dev'))
 app.use(helmet())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
 
 app.use(errorHandler)
