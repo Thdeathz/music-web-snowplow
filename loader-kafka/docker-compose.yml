@@ -5,6 +5,8 @@ services:
       - 2181:2181
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - kafka
 
   kafka:
     image: bitnami/kafka:latest
@@ -13,9 +15,13 @@ services:
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kafka
     depends_on:
       - zookeeper
 
@@ -36,5 +42,11 @@ services:
       - ./:/srv/server
     ports:
       - 4040:4040
+    networks:
+      - kafka
     depends_on:
       - mongodb
+
+networks:
+  kafka:
+    driver: bridge
