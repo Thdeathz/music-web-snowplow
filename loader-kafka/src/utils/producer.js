@@ -4,20 +4,30 @@ import { topics } from './topic.js'
 import axios from 'axios'
 import request from 'request'
 
-const apiUrl = 'http://snowplow.localhost:3000/micro/good'
+const apiUrl = 'http://snowplow:9090/micro/good'
 
 const producer = kafka.producer({
   createPartitioner: Partitioners.LegacyPartitioner
 })
 
 const fetchDataFromAPI = async () => {
-  try {
-    const response = await axios.get(apiUrl)
-    const data = await response.data
-    return data
-  } catch (error) {
-    console.error('Error fetching data from API:')
-  }
+  // try {
+  //   const response = await fetch(apiUrl)
+  //   console.log(response.data)
+  //   return response.data // Điều này giả sử dữ liệu của API trả về là dạng JSON
+  // } catch (error) {
+  //   console.error('Error fetching data from API:', error.message)
+  //   throw error
+  // }
+  request(apiUrl, (error, response, body) => {
+    if (error) {
+      console.error('Error fetching data from API:', error.message)
+      throw error
+    }
+
+    console.log(body)
+    return body
+  })
 }
 
 const producerSending = async () => {

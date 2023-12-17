@@ -3,7 +3,6 @@ import { brokers, kafka } from './brokers.js'
 import { topics } from './topic.js'
 
 const admin = kafka.admin()
-
 const createTopic = async () => {
   try {
     await admin.connect()

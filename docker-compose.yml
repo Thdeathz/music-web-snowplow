@@ -9,6 +9,7 @@ services:
       - --providers.docker.network=${COMPOSE_PROJECT_NAME}_client
       - --providers.docker.watch=true
       - --providers.docker.exposedbydefault=false
+      - --providers.zookeeper.endpoints=zookeeper:2181
     ports:
       - ${PORT:-80}:80
     labels:
@@ -74,6 +75,53 @@ services:
       - api
       - snowplow
 
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    ports:
+      - 2181:2181
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - 9091:9091
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zookeeper
+
+  mongodb:
+    image: mongo
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - ./.data/mongodb:/data/db
+
+  loader:
+    image: node:18-alpine
+    restart: unless-stopped
+    working_dir: /srv/server
+    tty: true
+    volumes:
+      - ./loader-kafka/:/srv/server
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-loader.rule=Host(`${LOADER_DOMAIN}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}-loader.loadbalancer.server.port=4040
+    links:
+      - kafka
+      - snowplow
+    depends_on:
+      - mongodb
+
   iglu:
     image: snowplow/iglu-server:0.11.0
     restart: unless-stopped
@@ -116,4 +164,3 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-postgres}
     ports:
       - ${POSTGRES_PORT:-5432}:5432
-

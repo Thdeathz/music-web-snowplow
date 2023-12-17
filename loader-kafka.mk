@@ -11,3 +11,5 @@ kafka-run:
 kafka-down:
 	cd ./loader-kafka && docker compose down --remove-orphans
 
+devloader:
+	docker exec -it ${COMPOSE_PROJECT_NAME}-loader-1 yarn dev

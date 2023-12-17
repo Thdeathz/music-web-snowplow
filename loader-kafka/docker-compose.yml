@@ -6,12 +6,12 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
-      - kafka
+      - web
 
   kafka:
     image: bitnami/kafka:latest
     ports:
-      - '9092:9092'
+      - '9091:9091'
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_LISTENERS=PLAINTEXT://:9092
@@ -21,7 +21,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - kafka
+      - web
     depends_on:
       - zookeeper
 
@@ -43,10 +43,10 @@ services:
     ports:
       - 4040:4040
     networks:
-      - kafka
+      - web
     depends_on:
       - mongodb
 
 networks:
-  kafka:
-    driver: bridge
+  web:
+    external: true

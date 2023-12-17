@@ -1,6 +1,6 @@
 import { Kafka, Partitioners } from 'kafkajs'
 
-const brokers = ['localhost:9092']
+const brokers = ['kafka:9092']
 
 const kafka = new Kafka({
   clientId: 'chillzone',
