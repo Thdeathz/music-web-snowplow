@@ -11,8 +11,9 @@ import connectDB from './databases/init.mogodb.js'
 import corsOptions from './config/corsOptions.js'
 
 import errorHandler from './middleware/errorHandler.js'
-import { fetchDataFromAPI, producerSending } from './utils/producer.js'
+import { fetchDataFromAPI, producerSending, running } from './utils/producer.js'
 import { createTopic } from './utils/create-topic.js'
+import { consumerReceiving } from './utils/consumer.js'
 
 dotenv.config()
 const app = express()
@@ -43,6 +44,6 @@ mongoose.connection.on('error', err => {
   console.log(err)
 })
 
-createTopic()
-// fetchDataFromAPI()
-producerSending()
+await createTopic()
+await running()
+consumerReceiving()

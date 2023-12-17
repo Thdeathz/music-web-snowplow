@@ -7,7 +7,7 @@ const createTopic = async () => {
   try {
     await admin.connect()
     await admin.createTopics({
-      topics: [topics]
+      topics
     })
 
     console.log('Topics created')

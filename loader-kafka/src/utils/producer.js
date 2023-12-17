@@ -6,7 +6,8 @@ import request from 'request'
 
 const apiUrl = 'http://snowplow:9090/micro/good'
 
-const lastdata = 0
+const map = new Map()
+
 const producer = kafka.producer({
   createPartitioner: Partitioners.LegacyPartitioner
 })
@@ -27,53 +28,37 @@ const fetchDataFromAPI = async () => {
 const producerSending = async () => {
   // connecting
   await producer.connect()
-  const data = await fetch(apiUrl)
 
-  // console.log(data)
-  // send new
-  // if (data.length > lastdata) {
-  //   const newData = dataArray.slice(lastdata)
-  data.forEach(element => {
-    const play_music_event = {
-      event_id: element.event.event_id,
-      user_id: element.domain_userid,
-      even_name: element.event.event_name,
-      contexts: element.event.unstruct_event.data.data,
-      time: element.raw_event.context.timestamp
-    }
-    console.log(play_music_event)
+  fetch(apiUrl)
+    .then(res => res.json())
+    .then(data => {
+      data.map(event => {
+        if (map.has(event.event.event_id)) {
+          return null
+        }
 
-    if (element.event.event_name == 'play_music') {
-      producer.send({
-        topic: 'listen',
-        messages: [{ value: play_music_event }]
+        map.set(event.event.event_id, true)
+
+        const play_music_event = {
+          event_id: event.event.event_id,
+          user_id: event.domain_userid,
+          event_name: event.event.event_name,
+          contexts: event.event.unstruct_event.data.data,
+          time: event.rawEvent.context.timestamp
+        }
+
+        producer.send({
+          topic: 'listen',
+          messages: [{ value: JSON.stringify(play_music_event) }]
+        })
+
+        console.log('Send event to listen topic')
       })
-
-      console.log(element)
-    } else if (element.event.event_name) {
-      producer.send({
-        topic: 'view',
-        messages: [{ value: play_music_event }]
-      })
-    } else {
-      producer.send({
-        topic: 'search',
-        messages: [{ value: play_music_event }]
-      })
-    }
-  })
-
-  lastdata = data.length
-  // } else {
-  //   console.log('No new data.')
-  // }
+    })
 }
 
 const running = async () => {
-  // await producer.connect()
-
-  setInterval(fetchDataAndProduce, 5000) // Lấy dữ liệu mỗi 5 giây (thay đổi theo nhu cầu)
-
+  setInterval(producerSending, 5000) // Lấy dữ liệu mỗi 5 giây (thay đổi theo nhu cầu)
   await producer.disconnect()
 }
 
