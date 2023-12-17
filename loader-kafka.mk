@@ -10,3 +10,4 @@ kafka-run:
 
 kafka-down:
 	cd ./loader-kafka && docker compose down --remove-orphans
+
