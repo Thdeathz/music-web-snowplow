@@ -16,6 +16,12 @@ const searchTopic = {
     replicationFactor: 1
 }
 
+const filterTopic = {
+    topic : "filter",
+    numPartitions: 1,
+    removeEventListener: 1,
+}
+
 const topics = [viewTopic, listenTopic, searchTopic];
 
 export {topics};

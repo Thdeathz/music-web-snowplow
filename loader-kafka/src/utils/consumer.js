@@ -6,7 +6,7 @@ const consumer = kafka.consumer({
 
 export const consumerReceiving = async () =>{
     await consumer.connect()
-    await consumer.subscribe({topic: topics[0], fromBeginning})
+    await consumer.subscribe({topic: topics[0], fromBeginning: true})
 
     await consumer.run({
         eachMessage: async({partition, message}) =>{

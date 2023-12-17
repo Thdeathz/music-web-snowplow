@@ -1,6 +1,6 @@
 import { Kafka, Partitioners } from 'kafkajs';
 
-const brokers = ['127.0.0.1:9092'];
+const brokers = ['kafka:9092'];
 
 const kafka = new Kafka({
     clientId: 'chillzone',

@@ -11,7 +11,7 @@ import connectDB from './databases/init.mogodb.js'
 import corsOptions from './config/corsOptions.js'
 
 import errorHandler from './middleware/errorHandler.js'
-import { producerSending} from './utils/producer.js'
+import { fetchDataFromAPI, producerSending} from './utils/producer.js'
 import { createTopic } from './utils/create-topic.js'
 dotenv.config()
 const app = express()
@@ -23,12 +23,12 @@ connectDB()
 /* MIDDLEWARE */
 app.use(morgan('dev'))
 app.use(helmet())
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.json())
 
 app.use(errorHandler)
 
-producerSending().catch(console.error)
+// producerSending().catch(console.error)
 // mongodb connection testing
 mongoose.connection.once('open', () => {
   console.log('Connected to database ><!')
@@ -42,8 +42,5 @@ mongoose.connection.on('error', err => {
   console.log(err)
 })
 
-// app.use(createTopic())
-// app.use(producerSending())
-
-// createTopic()
-
+createTopic()
+fetchDataFromAPI()
