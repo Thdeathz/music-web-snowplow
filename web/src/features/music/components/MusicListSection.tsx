@@ -1,5 +1,5 @@
 import React from 'react'
-import SectionHeader from './SectionHeader'
+import SectionHeader from '../../../components/SectionHeader'
 import FilterBar from './FilterBar'
 import MusicList from './MusicList'
 import PlayLists from './PlayLists'

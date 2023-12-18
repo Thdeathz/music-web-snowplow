@@ -45,7 +45,7 @@ const Login = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex-center h-full w-full">
+      <div className="flex-center h-auth-content w-full">
         <Form className="w-[35rem]" form={form} name="login" size="large" onFinish={onFinish} autoComplete="off">
           <Form.Item
             name="email"

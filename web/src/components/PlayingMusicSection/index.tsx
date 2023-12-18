@@ -11,10 +11,10 @@ const PlayingMusicSection = () => {
   const musicId = searchParams.get('play')
 
   return (
-    <div className="flex h-full max-h-content flex-col items-center justify-center gap-12 overflow-hidden">
+    <div className="flex h-full flex-col items-center justify-center gap-6 overflow-hidden">
       <MusicPlayer isPlaying={!!musicId} />
 
-      <div className="h-full w-full grow pb-12">
+      <div className="h-full w-full grow pb-10">
         {musicId ? (
           <PlayMusicControl musicId={musicId} />
         ) : (

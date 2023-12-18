@@ -8,6 +8,7 @@ import Login from './features/auth/Login'
 import Signup from './features/auth/Signup'
 import Home from './features/music/Home'
 import TrackerWrapper from './components/TrackerWrapper'
+import Artist from './features/music/Artist'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
 
         <Route element={<TrackerWrapper />}>
           <Route path="/" element={<Home />} />
+          <Route path="/:artistId" element={<Artist />} />
         </Route>
       </Route>
     </Routes>

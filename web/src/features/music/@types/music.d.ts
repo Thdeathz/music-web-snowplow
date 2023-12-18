@@ -16,3 +16,9 @@ declare interface IMusic {
   artist: IArtist
   topics: ITopic[]
 }
+
+declare interface IArtistMusic {
+  id: string
+  name: string
+  musics: IMusic[]
+}

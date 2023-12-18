@@ -49,7 +49,7 @@ const Signup = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex-center h-full w-full">
+      <div className="flex-center h-auth-content w-full">
         <Form form={form} className="w-[35rem]" name="register" size="large" autoComplete="off" onFinish={onFinish}>
           <Form.Item name="username" rules={[{ required: true, message: 'Username is required.' }]} initialValue="">
             <Input

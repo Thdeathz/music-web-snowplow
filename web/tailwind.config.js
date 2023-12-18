@@ -47,13 +47,14 @@ export default {
         'auto-fill': 'repeat(auto-fill, minmax(14rem, 1fr))'
       },
       height: {
-        content: 'calc(100vh - 4rem - 2rem)'
+        'main-content': 'calc(100vh - 4rem - 2rem)',
+        'auth-content': 'calc(100vh - 8rem)'
       },
       minHeight: {
-        content: 'calc(100vh - 4rem - 2rem)'
+        'main-content': 'calc(100vh - 4rem - 2rem)'
       },
       maxHeight: {
-        content: 'calc(100vh - 4rem - 2rem)'
+        'main-content': 'calc(100vh - 4rem - 2rem)'
       },
       transformOrigin: {
         normal: '0 1rem 0',

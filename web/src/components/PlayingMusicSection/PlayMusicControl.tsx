@@ -13,6 +13,7 @@ import IconWrapper from '~/components/IconWrapper'
 import { useGetMusicByIdQuery } from '../../features/music/store/musicService'
 import Loading from '~/components/Loading'
 import { defaultVariant } from '~/config/variant'
+import Topics from '../Topics'
 
 type PropsType = {
   musicId: string
@@ -41,19 +42,10 @@ const PlayMusicControl = ({ musicId }: PropsType) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-start gap-2">
-          {music.topics.slice(0, 3).map(topic => (
-            <div
-              key={`topic-${topic.id}`}
-              className="font-secondary w-min whitespace-nowrap rounded-full border-2 border-clr-link-light bg-clr-link-light px-5 text-3xl font-semibold leading-6 text-white"
-            >
-              {topic.name}
-            </div>
-          ))}
-        </div>
+        <Topics topics={music.topics.slice(0, 3)} />
       </div>
 
-      <div className="flex w-full items-center justify-between text-2xl font-medium">
+      <div className="flex w-full items-center justify-between py-4 text-2xl font-medium">
         <p className="">1:54</p>
 
         <p className="">3:35</p>

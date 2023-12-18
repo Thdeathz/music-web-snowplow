@@ -40,3 +40,19 @@ export const getMusicById: RequestHandler = async (req, res) => {
     data: music
   })
 }
+
+/**
+ * @desc Get music by artist
+ * @route GET /api/music/artist/:id
+ * @access Public
+ */
+export const getMusicByArtist: RequestHandler = async (req, res) => {
+  const { id } = req.params
+
+  const music = await musicService.getMusicByArtist(id)
+
+  return res.status(200).json({
+    message: 'Get music by artist successfully',
+    data: music
+  })
+}

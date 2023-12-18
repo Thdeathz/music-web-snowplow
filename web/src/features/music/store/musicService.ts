@@ -25,8 +25,14 @@ const musicService = apiSlice.injectEndpoints({
         }
         return [{ type: 'Topic', id: 'LIST' }]
       }
+    }),
+    getMusicByArtist: builder.query<IArtistMusic, string>({
+      query: id => `/music/artist/${id}`,
+      transformResponse: (response: ApiResponse<IArtistMusic>) => response.data,
+      providesTags: (result, error, arg) => [{ type: 'Music', id: arg }],
+      forceRefetch: () => true
     })
   })
 })
 
-export const { useGetMusicQuery, useGetMusicByIdQuery, useGetAllTopicsQuery } = musicService
+export const { useGetMusicQuery, useGetMusicByIdQuery, useGetAllTopicsQuery, useGetMusicByArtistQuery } = musicService

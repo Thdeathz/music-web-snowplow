@@ -49,3 +49,12 @@ p {
   -ms-overflow-style: none !important; /* IE and Edge */
   scrollbar-width: none !important; /* Firefox */
 }
+
+/* CARDS LIST HOVER ANIMATE */
+.card-item {
+  transition: opacity 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, z-index 0.25s ease 0.25s !important;
+}
+
+.card-list:hover .card-item {
+  opacity: 40%;
+}

@@ -124,9 +124,46 @@ const getMusicById = async (id: string) => {
   return music
 }
 
+const getMusicByArtist = async (artistId: string) => {
+  const music = await prisma.artist.findUnique({
+    where: {
+      id: artistId
+    },
+    select: {
+      id: true,
+      name: true,
+      musics: {
+        select: {
+          id: true,
+          title: true,
+          thumbnail: true,
+          duration: true,
+          artist: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          topics: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
+        }
+      }
+    }
+  })
+
+  if (!music) throw new Error('Music not found')
+
+  return music
+}
+
 export default {
   getMusics,
   getAllMusics,
   getMusicById,
+  getMusicByArtist,
   getAllMusicsByTopic
 }
