@@ -87,11 +87,9 @@ services:
     ports:
       - 9092:9092
     environment:
-      # KRaft settings
       - KAFKA_CFG_NODE_ID=0
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
-      # Listeners
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
@@ -185,14 +183,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./.data/metabase:/metabase-data
-    # environment:
-    #   - MB_DB_TYPE=mongo
-    #   - MB_DB_DBNAME=mern
-    #   - MB_DB_PORT=27017
-    #   - MB_DB_HOST=mongodb
-    # labels:
-    #   - traefik.enable=true
-    #   - traefik.http.routers.${COMPOSE_PROJECT_NAME}-metabase.rule=Host(`${METABASE_DOMAIN}`)
-    #   - traefik.http.services.${COMPOSE_PROJECT_NAME}-metabase.loadbalancer.server.port=3500
     ports:
       - 3500:3000
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
