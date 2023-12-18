@@ -6,6 +6,14 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  userId: {
+    type: String,
+    default: null
+  },
+  userName: {
+    type: String,
+    default: null
+  },
   songId: {
     type: String,
     default: null

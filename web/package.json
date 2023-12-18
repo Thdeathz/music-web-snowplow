@@ -15,6 +15,7 @@
     "@snowplow/browser-plugin-link-click-tracking": "^3.19.0",
     "@snowplow/browser-tracker": "^3.19.0",
     "antd": "^5.7.0",
+    "classnames": "^2.3.2",
     "firebase": "^10.0.0",
     "framer-motion": "^10.12.21",
     "jwt-decode": "^3.1.2",

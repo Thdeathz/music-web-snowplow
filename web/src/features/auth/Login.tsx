@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Button, Checkbox, Divider, Form, Input, message } from 'antd'
-import { LoadingOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
+import { Checkbox, Divider, Form, message } from 'antd'
 import { useDocumentTitle } from 'usehooks-ts'
 
 import AuthLayout from '~/components/Layouts/AuthLayout'
@@ -10,6 +9,11 @@ import usePersist from '~/hooks/usePersist'
 import { EMAIL_REGEX } from '~/config/regex'
 import GoogleLogin from './components/GoogleLogin'
 import { signInErrorMessages } from './utils/errorMessage'
+import DefaultLayout from '~/components/Layouts/DefaultLayout'
+import Loading from '~/components/Loading'
+import Input from '~/components/Input'
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
+import Button from '~/components/Button'
 
 const Login = () => {
   useDocumentTitle('Login | ChillZone')
@@ -40,54 +44,71 @@ const Login = () => {
   }
 
   return (
-    <AuthLayout>
-      <p className="mb-2 text-4xl font-bold">Login</p>
+    <DefaultLayout>
+      <div className="flex-center h-full w-full">
+        <Form className="w-[35rem]" form={form} name="login" size="large" onFinish={onFinish} autoComplete="off">
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: 'Email is required.' },
+              { pattern: EMAIL_REGEX, message: 'Email is not valid.' }
+            ]}
+            initialValue=""
+          >
+            <Input
+              id="email"
+              withPrefix={<p className="w-[4rem]">Email</p>}
+              placeholder="example@gmail.com"
+              autoComplete="email"
+            />
+          </Form.Item>
 
-      <Form form={form} name="login" size="large" onFinish={onFinish} autoComplete="off" className="min-w-[24rem]">
-        <Form.Item
-          name="email"
-          rules={[
-            { required: true, message: 'Email is required.' },
-            { pattern: EMAIL_REGEX, message: 'Email is not valid.' }
-          ]}
-        >
-          <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Email" autoComplete="email" />
-        </Form.Item>
+          <Form.Item name="password" rules={[{ required: true, message: 'Password is required.' }]} initialValue="">
+            <Input
+              id="password"
+              withPrefix={<p className="w-[4rem]">Password</p>}
+              lastIcon={passwordVisible ? <AiFillEye /> : <AiFillEyeInvisible />}
+              lastIconOnClick={() => setPasswordVisible(prev => !prev)}
+              placeholder="secret password"
+              type={passwordVisible ? 'text' : 'password'}
+            />
+          </Form.Item>
 
-        <Form.Item name="password" rules={[{ required: true, message: 'Password is required.' }]}>
-          <Input.Password
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            placeholder="Password"
-            autoComplete="current-password"
-            visibilityToggle={{ visible: passwordVisible, onVisibleChange: setPasswordVisible }}
-          />
-        </Form.Item>
+          <div className="mb-2 flex items-center justify-between text-text-light dark:text-text-dark">
+            <Checkbox
+              defaultChecked={persist}
+              onChange={() => setPersist(prev => !prev)}
+              className="text-text-light dark:text-text-dark"
+            >
+              Remember me
+            </Checkbox>
 
-        <div className="flex items-center justify-between">
-          <Checkbox defaultChecked={persist} onChange={() => setPersist(prev => !prev)} className="mb-4">
-            Remember me
-          </Checkbox>
-        </div>
-        <Form.Item>
-          <Button className="flex-center" type="primary" ghost htmlType="submit" block disabled={isLoading}>
-            {isLoading ? <LoadingOutlined className="flex-center text-lg" /> : 'Login'}
+            <p>
+              <Link to="/forgot-password" className="hover:text-primary-5 transition-colors">
+                Forgot password ?
+              </Link>
+            </p>
+          </div>
+
+          <Button className="w-full text-lg" type="primary" htmlType="submit" disabled={isLoading}>
+            {isLoading ? <Loading /> : 'Sign In'}
           </Button>
-        </Form.Item>
 
-        <Divider plain>or sign in with</Divider>
+          <Divider plain className="uppercase text-text-light dark:text-text-dark">
+            or
+          </Divider>
 
-        <div className="flex w-full items-center justify-between gap-4">
           <GoogleLogin form={form} />
-        </div>
 
-        <div className="mt-2 text-base">
-          Haven't account yet?{' '}
-          <Link to="/signup" className="cursor-pointer font-medium text-primary-5 transition-all hover:border-b">
-            Register
-          </Link>
-        </div>
-      </Form>
-    </AuthLayout>
+          <div className="mt-4 text-base text-text-light dark:text-text-dark">
+            Haven&apos;t account yet?
+            <Link to="/signup" className="text-primary-5 ml-2 cursor-pointer font-medium transition-all hover:border-b">
+              Sign up
+            </Link>
+          </div>
+        </Form>
+      </div>
+    </DefaultLayout>
   )
 }
 

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { selectCurrentFilterTopic, setFilterTopic } from '../store/musicSlice'
 import { useAppSelector } from '~/hooks/useRedux'
 import { trackSelfDescribingEvent } from '@snowplow/browser-tracker'
+import useAuth from '~/hooks/useAuth'
 
 type FilterItemPropsType = {
   id: string
@@ -14,6 +15,7 @@ type FilterItemPropsType = {
 
 const FilterItem = ({ id, name, actived = false }: FilterItemPropsType) => {
   const dispatch = useDispatch()
+  const { userId, username } = useAuth()
 
   const onClick = () => {
     if (id !== 'All')
@@ -21,6 +23,8 @@ const FilterItem = ({ id, name, actived = false }: FilterItemPropsType) => {
         event: {
           schema: 'iglu:com.chillzone/filter_topic/jsonschema/1-0-0',
           data: {
+            user_id: userId,
+            username,
             topic_id: id,
             topic_name: name
           }

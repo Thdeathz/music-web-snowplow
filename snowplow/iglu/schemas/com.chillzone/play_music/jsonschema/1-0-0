@@ -9,6 +9,14 @@
   },
   "type": "object",
   "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "The ID of the user"
+    },
+    "username": {
+      "type": "string",
+      "description": "The username of the user"
+    },
     "song_id": {
       "type": "string",
       "description": "The ID of the song"

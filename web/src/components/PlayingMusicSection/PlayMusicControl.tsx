@@ -7,10 +7,12 @@ import {
   IoRepeatOutline,
   IoShuffle
 } from 'react-icons/io5'
+import { motion } from 'framer-motion'
 
 import IconWrapper from '~/components/IconWrapper'
-import { useGetMusicByIdQuery } from '../store/musicService'
+import { useGetMusicByIdQuery } from '../../features/music/store/musicService'
 import Loading from '~/components/Loading'
+import { defaultVariant } from '~/config/variant'
 
 type PropsType = {
   musicId: string
@@ -22,7 +24,13 @@ const PlayMusicControl = ({ musicId }: PropsType) => {
   if (isLoading || isFetching || !music) return <Loading className="text-3xl" />
 
   return (
-    <>
+    <motion.div
+      className="flex h-full w-full flex-col  items-center justify-between"
+      variants={defaultVariant}
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+    >
       <div className="w-full">
         <div className="flex items-center justify-between">
           <p className="font-secondary truncate px-2 text-6xl font-semibold">{music.title}</p>
@@ -62,7 +70,7 @@ const PlayMusicControl = ({ musicId }: PropsType) => {
 
         <IconWrapper className="text-3xl" icon={<IoShuffle />} />
       </div>
-    </>
+    </motion.div>
   )
 }
 

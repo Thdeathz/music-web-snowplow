@@ -5,6 +5,7 @@ import { selectCurrentToken } from '~/features/auth/store/authSlice'
 
 type JwtPayload = {
   UserInfo: {
+    id: string
     username: string
     email: string
     avatarUrl: string
@@ -19,15 +20,15 @@ const useAuth = () => {
 
   if (token) {
     const decoded = jwtDecode(token) as JwtPayload
-    const { email, roles, username } = decoded.UserInfo
+    const { id, email, roles, username } = decoded.UserInfo
 
     isUser = roles?.includes('USER')
     isAdmin = roles?.includes('ADMIN')
 
-    return { email, roles, isUser, isAdmin, username }
+    return { userId: id, email, roles, isUser, isAdmin, username }
   }
 
-  return { email: '', roles: [], isUser, isAdmin, username: '' }
+  return { email: '', roles: [], isUser, isAdmin }
 }
 
 export default useAuth

@@ -21,11 +21,13 @@ export const consumerReceiving = async () => {
 
       try {
         await Event.create({
+          userId: data.contexts.user_id,
+          userName: data.contexts.username,
           eventName: data.event_name,
           songId: data.contexts.song_id,
           songTitle: data.contexts.song_title,
           artistName: data.contexts.artist_name,
-          topicList: data.contexts.topic_list,
+          topicList: data.contexts.topics_list,
           time: data.time,
           topicId: data.contexts.topic_id,
           topicName: data.contexts.topic_name

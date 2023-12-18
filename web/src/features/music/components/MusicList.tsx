@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { trackSelfDescribingEvent } from '@snowplow/browser-tracker'
 import { selectCurrentFilterTopic } from '../store/musicSlice'
 import { useAppSelector } from '~/hooks/useRedux'
+import useAuth from '~/hooks/useAuth'
 
 type MusicItemPropsType = {
   music: IMusic
@@ -14,12 +15,15 @@ type MusicItemPropsType = {
 
 const MusicItem = ({ music }: MusicItemPropsType) => {
   const navigate = useNavigate()
+  const { userId, username } = useAuth()
 
   const onPlaySong = () => {
     trackSelfDescribingEvent({
       event: {
         schema: 'iglu:com.chillzone/play_music/jsonschema/1-0-0',
         data: {
+          user_id: userId,
+          username,
           song_id: music.id,
           song_title: music.title,
           artist_name: music.artist.name,
@@ -40,6 +44,8 @@ const MusicItem = ({ music }: MusicItemPropsType) => {
       event: {
         schema: 'iglu:com.chillzone/filter_artist/jsonschema/1-0-0',
         data: {
+          user_id: userId,
+          username,
           artist_id: music.artist.id,
           artist_name: music.artist.name
         }

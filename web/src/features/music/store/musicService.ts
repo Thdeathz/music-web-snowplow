@@ -14,7 +14,8 @@ const musicService = apiSlice.injectEndpoints({
     getMusicById: builder.query<IMusic, string>({
       query: id => `/music/${id}`,
       transformResponse: (response: ApiResponse<IMusic>) => response.data,
-      providesTags: (result, error, arg) => [{ type: 'Music', id: arg }]
+      providesTags: (result, error, arg) => [{ type: 'Music', id: arg }],
+      forceRefetch: () => true
     }),
     getAllTopics: builder.query<ApiResponsePaginated<ITopic[]>, { page: number; offset?: number }>({
       query: ({ page, offset }) => `/topic?page=${page}&offset=${offset || 10}`,
